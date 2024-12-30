@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Enhanced Digital Clock</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #2c3e50;
+            color: #ecf0f1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .clock {
+            text-align: center;
+            padding: 20px;
+            border-radius: 10px;
+            background: #34495e;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
+        }
+
+        .time {
+            font-size: 4rem;
+            margin: 10px 0;
+        }
+
+        .date {
+            font-size: 1.5rem;
+        }
+
+        .controls {
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        .input-group {
+            margin: 10px 0;
+        }
+
+        input, button {
+            padding: 10px;
+            font-size: 1rem;
+            margin: 5px;
+        }
+
+        button {
+            cursor: pointer;
+            border: none;
+            border-radius: 5px;
+        }
+
+        .set-alarm {
+            background-color: #27ae60;
+            color: white;
+        }
+
+        .set-time {
+            background-color: #2980b9;
+            color: white;
+        }
+
+        .clear {
+            background-color: #c0392b;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <div class="clock">
+        <div class="time" id="time">00:00:00</div>
+        <div class="date" id="date">Loading date...</div>
+    </div>
+
+    <div class="controls">
+        <div class="input-group">
+            <label for="alarmTime">Set Alarm:</label>
+            <input type="time" id="alarmTime">
+            <button class="set-alarm" onclick="setAlarm()">Set Alarm</button>
+            <button class="clear" onclick="clearAlarm()">Clear Alarm</button>
+        </div>
+
+        <div class="input-group">
+            <label for="customDate">Change Date:</label>
+            <input type="date" id="customDate">
+            <label for="customTime">Change Time:</label>
+            <input type="time" id="customTime">
+            <button class="set-time" onclick="updateDateTime()">Set</button>
+        </div>
+    </div>
+
+    <script>
+        let alarmTime = null;
+        let isAlarmSet = false;
+
+        function updateClock() {
+            const now = new Date();
+            const timeString = now.toLocaleTimeString();
+            const dateString = now.toDateString();
+
+            document.getElementById('time').textContent = timeString;
+            document.getElementById('date').textContent = dateString;
+
+            // Check Alarm
+            if (isAlarmSet && alarmTime === timeString.slice(0, 5)) {
+                alert('⏰ Alarm ringing!');
+                isAlarmSet = false; // Reset alarm after ringing
+            }
+        }
+
+        function setAlarm() {
+            const alarmInput = document.getElementById('alarmTime').value;
+            if (alarmInput) {
+                alarmTime = alarmInput;
+                isAlarmSet = true;
+                alert(`Alarm set for ${alarmTime}`);
+            } else {
+                alert('Please select a valid time for the alarm.');
+            }
+        }
+
+        function clearAlarm() {
+            alarmTime = null;
+            isAlarmSet = false;
+            alert('Alarm cleared.');
+        }
+
+        function updateDateTime() {
+            const customDate = document.getElementById('customDate').value;
+            const customTime = document.getElementById('customTime').value;
+
+            if (customDate) {
+                document.getElementById('date').textContent = new Date(customDate).toDateString();
+            }
+
+            if (customTime) {
+                document.getElementById('time').textContent = customTime + ':00';
+            }
+        }
+
+        setInterval(updateClock, 1000);
+        updateClock(); // Call immediately to display time without delay
+    </script>
+</body>
+</html>
